@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HEO NẠP XU - ĐẠI LÝ TIKTOK ỦY QUYỀN</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; background-color: #f3f4f6; }
+        .coin-card.active { border-color: #fe2c55; background-color: #fff1f3; transform: scale(1.02); box-shadow: 0 10px 20px rgba(254, 44, 85, 0.15); }
+        .btn-pay { background: linear-gradient(135deg, #fe2c55 0%, #ff5e7e 100%); }
+        .hidden { display: none; }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        .animate-slide-up { animation: slideUp 0.3s ease-out; }
+        .notification-pop { animation: slideInLeft 0.5s ease-out; }
+        @keyframes slideInLeft { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <div class="max-w-md mx-auto bg-white min-h-screen shadow-2xl flex flex-col relative overflow-hidden">
+        
+        <nav class="flex items-center justify-between p-5 sticky top-0 bg-white/90 backdrop-blur-md z-50 border-b border-gray-100">
+            <div class="flex items-center gap-2">
+                <div class="bg-black p-1.5 rounded-lg">
+                    <i class="fa-brands fa-tiktok text-white text-xl"></i>
+                </div>
+                <span class="font-black text-xl italic uppercase tracking-tighter text-gray-900">HEO <span class="text-[#fe2c55]">NẠP XU</span></span>
+            </div>
+            <div class="flex items-center gap-2 bg-green-50 px-3 py-1 rounded-full">
+                <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                <span class="text-[10px] font-bold text-green-600 uppercase">Hệ thống Online</span>
+            </div>
+        </nav>
+
+        <div id="fake-notif" class="fixed top-20 left-4 z-[100] hidden">
+            <div class="bg-white/95 backdrop-blur shadow-lg rounded-2xl p-3 flex items-center gap-3 border border-gray-100 notification-pop">
+                <img src="https://i.pravatar.cc/100" id="notif-avatar" class="w-8 h-8 rounded-full border-2 border-[#fe2c55]">
+                <div>
+                    <p class="text-[10px] font-black text-gray-800"><span id="notif-name">Người dùng</span> vừa nạp <span class="text-[#fe2c55]" id="notif-coin">1,000</span> Xu</p>
+                    <p class="text-[8px] text-gray-400 font-bold uppercase">Thành công 1 phút trước</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-6 flex-1 pb-48">
+            <div class="bg-gradient-to-br from-gray-900 via-gray-800 to-black rounded-[2.5rem] p-7 mb-8 text-white shadow-2xl relative overflow-hidden">
+                <div class="relative z-10">
+                    <p class="text-[10px] font-bold text-[#fe2c55] mb-2 uppercase tracking-[3px]">Ưu đãi hôm nay</p>
+                    <h1 class="text-2xl font-black italic leading-tight mb-2">CHIẾT KHẤU 30% <br>KHI NẠP QUA BANK</h1>
+                    <div class="flex items-center gap-3 mt-4 text-[10px] font-bold text-gray-400">
+                        <span class="flex items-center gap-1"><i class="fa-solid fa-circle-check text-green-500"></i> Uy tín</span>
+                        <span class="flex items-center gap-1"><i class="fa-solid fa-bolt text-yellow-500"></i> Nạp nhanh</span>
+                        <span class="flex items-center gap-1"><i class="fa-solid fa-shield-heart text-blue-500"></i> Bảo mật</span>
+                    </div>
+                </div>
+                <i class="fa-solid fa-piggy-bank absolute -right-6 -bottom-6 text-white/5 text-9xl rotate-12"></i>
+            </div>
+
+            <div class="mb-8">
+                <h2 class="text-[11px] font-black text-gray-500 uppercase tracking-[2px] mb-4 px-1">1. Nhập tài khoản nhận xu</h2>
+                <div id="id_input_area" class="relative group">
+                    <input type="text" id="tiktok_id" placeholder="ID TikTok (Ví dụ: @heonapxu)..." 
+                        class="w-full bg-gray-50 border-2 border-gray-100 rounded-2xl px-6 py-5 outline-none focus:border-[#fe2c55] focus:bg-white font-bold text-base transition-all">
+                    <button onclick="handleVerify()" class="absolute right-3 top-3 bg-black text-white text-[10px] font-black px-5 py-3 rounded-xl active:scale-95 transition-all uppercase">Xác thực</button>
+                </div>
+                <div id="verified_box" class="hidden bg-black text-white p-5 rounded-3xl flex justify-between items-center animate-slide-up shadow-xl">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 bg-gradient-to-tr from-[#fe2c55] to-[#ff5e7e] rounded-full flex items-center justify-center shadow-lg">
+                            <i class="fa-solid fa-user-check text-sm"></i>
+                        </div>
+                        <div>
+                            <p id="final_id_display" class="font-black text-lg tracking-tight">@---</p>
+                            <p class="text-[9px] text-green-400 font-bold uppercase tracking-widest flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 bg-green-400 rounded-full animate-ping"></span> Sẵn sàng nạp
+                            </p>
+                        </div>
+                    </div>
+                    <button onclick="handleResetID()" class="bg-white/10 hover:bg-white/20 p-3 rounded-2xl transition-all">
+                        <i class="fa-solid fa-rotate text-xs"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center mb-4 px-1">
+                <h2 class="text-[11px] font-black text-gray-500 uppercase tracking-[2px]">2. Chọn gói xu muốn nạp</h2>
+                <span class="text-[10px] font-black text-[#fe2c55] bg-red-50 px-2 py-1 rounded-lg italic underline">1 Xu = 285đ</span>
+            </div>
+            
+            <div class="grid grid-cols-3 gap-3">
+                <div class="coin-card border-2 border-gray-100 rounded-[2rem] p-5 flex flex-col items-center cursor-pointer bg-white transition-all group" onclick="setCoin(70)">
+                    <i class="fa-solid fa-coins text-[#fe2c55] text-xl mb-2"></i>
+                    <span class="font-black text-xl">70</span>
+                    <span class="text-[9px] text-gray-400 font-bold uppercase">19.9k</span>
+                </div>
+                
+                <div class="coin-card border-2 border-gray-100 rounded-[2rem] p-5 flex flex-col items-center cursor-pointer bg-white transition-all group" onclick="setCoin(1000)">
+                    <i class="fa-solid fa-fire text-[#fe2c55] text-xl mb-2"></i>
+                    <span class="font-black text-xl">1K</span>
+                    <span class="text-[9px] text-gray-400 font-bold uppercase">285k</span>
+                </div>
+
+                <div class="coin-card border-2 border-gray-100 rounded-[2rem] p-5 flex flex-col items-center justify-center cursor-pointer bg-gray-50 border-dashed" onclick="showCustomModal()">
+                    <i class="fa-solid fa-plus text-gray-300 text-xl"></i>
+                    <span class="text-[9px] text-gray-400 font-bold uppercase mt-1">Tự chọn</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="fixed bottom-0 max-w-md w-full p-6 bg-white border-t border-gray-50 shadow-[0_-20px_40px_rgba(0,0,0,0.06)] rounded-t-[3.5rem] z-40">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[2px]">TỔNG TIỀN</p>
+                    <p id="total_price_text" class="text-3xl font-black text-gray-900 tracking-tighter">0đ</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[2px]">NHẬN</p>
+                    <p id="total_coin_text" class="text-xl font-black text-[#fe2c55]">0 Xu</p>
+                </div>
+            </div>
+            <button onclick="handlePayment()" class="btn-pay w-full text-white font-black py-5 rounded-[2rem] shadow-xl uppercase text-sm tracking-[3px]">Tiến hành nạp ngay</button>
+        </div>
+
+        <div id="modal_custom" class="hidden fixed inset-0 bg-black/80 z-[60] flex items-center justify-center p-6 backdrop-blur-md">
+            <div class="bg-white w-full rounded-[3rem] p-10 shadow-2xl animate-slide-up">
+                <input type="number" id="input_custom_coin" placeholder="Số xu..." class="w-full bg-gray-50 rounded-3xl px-6 py-6 text-center text-4xl font-black mb-6 focus:border-[#fe2c55] outline-none border-2 border-transparent">
+                <div class="flex gap-4">
+                    <button onclick="hideCustomModal()" class="flex-1 bg-gray-100 font-bold py-4 rounded-[1.5rem] uppercase text-[10px]">Đóng</button>
+                    <button onclick="confirmCustom()" class="flex-1 bg-black text-white font-bold py-4 rounded-[1.5rem] uppercase text-[10px]">Xác nhận</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="modal_qr" class="hidden fixed inset-0 bg-black/90 z-[70] flex items-end justify-center backdrop-blur-xl">
+            <div class="bg-white w-full max-w-md rounded-t-[4rem] p-10 animate-slide-up">
+                <div class="w-16 h-1 bg-gray-200 rounded-full mx-auto mb-8"></div>
+                <div class="flex justify-center mb-8">
+                    <img id="qr_image" src="" class="w-60 h-60 border-4 border-[#fe2c55] rounded-3xl p-2" alt="QR">
+                </div>
+                <div class="bg-gray-50 p-6 rounded-[2rem] space-y-2 mb-8">
+                    <p class="text-[10px] font-bold text-gray-400 uppercase">Nội dung: <span id="qr_content_text" class="text-[#fe2c55] text-base font-black">---</span></p>
+                    <p class="text-[10px] font-bold text-gray-400 uppercase">Số tiền: <span id="qr_price_display" class="text-gray-900 text-lg font-black">0đ</span></p>
+                </div>
+                <button onclick="openZalo()" class="w-full bg-[#0068ff] text-white font-black py-5 rounded-[1.5rem] mb-4 uppercase text-xs">Gửi Zalo báo Admin</button>
+                <button onclick="document.getElementById('modal_qr').classList.add('hidden')" class="w-full text-gray-300 font-bold text-[10px] uppercase">Đóng</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedCoin = 0;
+        let selectedPrice = 0;
+        let verifiedID = "";
+        let globalOrderCode = "";
+
+        const names = ["Quốc Cường", "Minh Tuấn", "Huyền Trang", "Thanh Tâm", "Anh Tuấn", "Văn Nam", "Thị Hoa"];
+        const coins = [70, 100, 500, 1000, 2000, 5000];
+        
+        setInterval(() => {
+            if(Math.random() > 0.7) {
+                const name = names[Math.floor(Math.random() * names.length)];
+                const coin = coins[Math.floor(Math.random() * coins.length)];
+                const pop = document.getElementById('fake-notif');
+                if(pop) {
+                    document.getElementById('notif-name').innerText = name.substring(0,2) + "***";
+                    document.getElementById('notif-coin').innerText = coin.toLocaleString();
+                    document.getElementById('notif-avatar').src = `https://i.pravatar.cc/100?u=${Math.random()}`;
+                    pop.classList.remove('hidden');
+                    setTimeout(() => pop.classList.add('hidden'), 4000);
+                }
+            }
+        }, 8000);
+
+        function handleVerify() {
+            const idVal = document.getElementById('tiktok_id').value.trim();
+            if(!idVal) return alert("⚠️ Nhập ID!");
+            verifiedID = idVal;
+            document.getElementById('id_input_area').classList.add('hidden');
+            document.getElementById('verified_box').classList.remove('hidden');
+            document.getElementById('final_id_display').innerText = "@" + idVal;
+        }
+
+        function handleResetID() {
+            verifiedID = "";
+            document.getElementById('id_input_area').classList.remove('hidden');
+            document.getElementById('verified_box').classList.add('hidden');
+        }
+
+        function setCoin(coin) {
+            document.querySelectorAll('.coin-card').forEach(c => c.classList.remove('active'));
+            selectedCoin = coin;
+            selectedPrice = Math.round(coin * 285);
+            document.getElementById('total_price_text').innerText = selectedPrice.toLocaleString() + 'đ';
+            document.getElementById('total_coin_text').innerText = coin.toLocaleString() + ' Xu';
+        }
+
+        function showCustomModal() { document.getElementById('modal_custom').classList.remove('hidden'); }
+        function hideCustomModal() { document.getElementById('modal_custom').classList.add('hidden'); }
+
+        function confirmCustom() {
+            const num = parseInt(document.getElementById('input_custom_coin').value);
+            if(!num || num < 30) return alert("Tối thiểu 30 xu!");
+            setCoin(num);
+            hideCustomModal();
+        }
+
+        function handlePayment() {
+            if(!verifiedID) return alert("⚠️ Hãy xác thực ID!");
+            if(selectedCoin < 30) return alert("⚠️ Chọn gói nạp!");
+            const randomCode = "HEO" + Math.floor(Math.random() * 90000 + 10000);
+            globalOrderCode = `${randomCode} ${verifiedID.replace(/[^a-zA-Z0-9]/g, "")}`;
+            const qrUrl = `https://img.vietqr.io/image/MB-0326457411-compact.png?amount=${selectedPrice}&addInfo=${encodeURIComponent(globalOrderCode)}&accountName=NGUYEN%20VO%20QUOC%20CUONG`;
+            document.getElementById('qr_image').src = qrUrl;
+            document.getElementById('qr_content_text').innerText = globalOrderCode;
+            document.getElementById('qr_price_display').innerText = selectedPrice.toLocaleString() + 'đ';
+            document.getElementById('modal_qr').classList.remove('hidden');
+        }
+
+        function openZalo() {
+            const message = `Admin ơi mình nạp xu!\n- ID: @${verifiedID}\n- Nạp: ${selectedCoin.toLocaleString()} Xu\n- Mã: ${globalOrderCode}`;
+            window.location.href = `https://zalo.me/0326457411?text=${encodeURIComponent(message)}`;
+        }
+    </script>
+</body>
+</html>
